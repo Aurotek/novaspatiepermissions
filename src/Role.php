@@ -2,6 +2,8 @@
 
 namespace Itsmejoshua\Novaspatiepermissions;
 
+use Illuminate\Database\Eloquent\Builder;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Resource;
 use Spatie\Permission\Models\Role as SpatieRole;
 
@@ -58,4 +60,19 @@ class Role extends Resource
 	{
 		return __('nova-spatie-permissions::lang.Role');
 	}
+
+	/**
+     * Build an "index" query for the given resource.
+     *
+     * @param  NovaRequest  $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query): Builder
+    {
+        $query->select('roles.*')
+            ->where('name', '!=', 'system_user');
+
+        return $query;
+    }
 }
